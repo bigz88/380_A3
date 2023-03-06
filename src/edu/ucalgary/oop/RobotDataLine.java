@@ -4,7 +4,7 @@ package edu.ucalgary.oop;
 import java.time.LocalDate;
 import java.util.regex.Pattern;
 
-public class RobotDataLine {
+public class RobotDataLine implements Cloneable {
     private String dataLine;
     private String robotID;
     private Sensor sensor;
@@ -16,7 +16,7 @@ public class RobotDataLine {
     private static final String ROBOT_REGEX = "\\s([0-9]{3}[A-Z]{1})\\s";
     private static final Pattern ROBOT_PATTERN = Pattern.compile(ROBOT_REGEX);
 
-    public RobotDataLine(String line){
+    public RobotDataLine(String line) throws IllegalArgumentException{
 
     }
 
