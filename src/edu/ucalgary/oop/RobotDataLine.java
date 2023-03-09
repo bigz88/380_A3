@@ -24,7 +24,7 @@ public class RobotDataLine implements Cloneable {
             this.robotID = r.group(1);
         }
         else if (!r.find()){
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("ID invalid.");
         }
         Matcher d = DATE_PATTERN.matcher(line);
         if (d.find()) {
@@ -34,10 +34,10 @@ public class RobotDataLine implements Cloneable {
             this.date = LocalDate.parse(str);
         }
         else if (!(d.find())){
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Date invalid.");
         }
-        this.sensor = new Sensor(line);
-        this.movement = new Movement(line);
+        this.sensor = new Sensor(line.substring(line.indexOf("("), line.indexOf(")")+1));
+        this.movement = new Movement(line.substring(line.indexOf("\""), line.indexOf("(")-1));
     }
 
     public String getRobotID(){
@@ -61,6 +61,7 @@ public class RobotDataLine implements Cloneable {
     }
 
     public Object clone() throws CloneNotSupportedException{
-        return super.clone();
+        RobotDataLine copy = (RobotDataLine)super.clone();
+        return copy;
     }
 }

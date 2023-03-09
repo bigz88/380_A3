@@ -11,8 +11,9 @@ public class Sensor implements Cloneable, FormattedOutput{
 
     public Sensor(String sensor) throws IllegalArgumentException{
         Matcher m = PATTERN.matcher(sensor);
+        System.out.println(sensor);
         if (m.find()){
-            this.sensor = m.group(1).replace("(", "").replace(")", "");
+            this.sensor = m.group(1);
         }
         else{
             throw new IllegalArgumentException();

@@ -9,17 +9,26 @@ public class Movement implements Cloneable, FormattedOutput {
     private static final String REGEX = "\"([A-Z]+)-([A-Z]{1,2})";
     private static final Pattern PATTERN = Pattern.compile(REGEX);
 
-    public Movement(String movement) throws IllegalArgumentException{
+    public Movement(String movement) throws IllegalArgumentException {
+        movement = movement.replaceAll("\\s", "");
         Matcher m = PATTERN.matcher(movement);
-        if (m.find()){
-            String substr = movement.substring(movement.indexOf('"'));
-            this.action = substr.substring(substr.indexOf('"')+1, substr.indexOf(' '));
-            this.direction = substr.substring(substr.indexOf("- ")+2, substr.indexOf(" ("));
+        if (m.find()) {
+            for (Actions action : Actions.values()) {
+                if (m.group(1).equals(String.valueOf(action))) {
+                    this.action = m.group(1);
+                    break;
+                }
+            }
+            for (Directions direction : Directions.values()) {
+                if (m.group(2).equals(direction.name())) {
+                    this.direction = m.group(2);
+                    break;
+                }
+            }
         }
         else {
             throw new IllegalArgumentException();
         }
-
     }
 
     public String getAction(){
@@ -30,19 +39,20 @@ public class Movement implements Cloneable, FormattedOutput {
         return this.direction;
     }
 
+    @Override
     public Object clone() throws CloneNotSupportedException{
         return super.clone();
     }
-
+    @Override
     public String getFormatted(){
         StringBuilder sb = new StringBuilder("Action: ");
         for (Actions action: Actions.values()) {
-            if ((this.action).equals(action.toString())) {
-                sb.append(action.toString() + ",");
+            if ((this.action != null) && (this.action).equals(action.toString())) {
+                sb.append(action + ",");
             }
         }
         for (Directions direction: Directions.values()){
-            if ((this.direction.equals(direction.name()))){
+            if ((this.direction != null) && (this.direction.equals(direction.name()))){
                 sb.append(" Direction: " + direction);
             }
         }
