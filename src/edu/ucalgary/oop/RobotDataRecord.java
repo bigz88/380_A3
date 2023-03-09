@@ -26,6 +26,11 @@ public class RobotDataRecord implements Cloneable{
     }
 
     public Object clone() throws CloneNotSupportedException{
-        return super.clone();
+        RobotDataRecord copy = (RobotDataRecord)super.clone();
+        copy.log = new ArrayList <>();
+        for(int i = 0; i < log.size(); i++) {
+            copy.log.add((RobotDataLine) log.get(i).clone());
+        }
+        return copy;
     }
 }

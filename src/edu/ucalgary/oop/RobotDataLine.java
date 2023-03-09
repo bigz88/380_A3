@@ -2,6 +2,7 @@ package edu.ucalgary.oop;
 // Assignment 3.
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,26 +19,26 @@ public class RobotDataLine implements Cloneable {
     private static final Pattern ROBOT_PATTERN = Pattern.compile(ROBOT_REGEX);
 
     public RobotDataLine(String line) throws IllegalArgumentException{
-        this.dataLine = line;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         Matcher r = ROBOT_PATTERN.matcher(line);
-        if (r.find()){
-            this.robotID = r.group(1);
-        }
-        else if (!r.find()){
-            throw new IllegalArgumentException("ID invalid.");
-        }
         Matcher d = DATE_PATTERN.matcher(line);
-        if (d.find()) {
-            String str = (d.group().replace("[", "")
-                    .replace("]", "").replaceAll("(\\d{2})/(\\d{2})/(\\d{4})", "$3/$2/$1")
-                    .replace("/", "-"));
-            this.date = LocalDate.parse(str);
+
+        String c = "\\[(0[1-9]|[1-2][0-9]|3[0-1])\\/(0[1-9]|1[0-2])\\/\\d{4}\\]";
+        Pattern calendarPattern = Pattern.compile(c);
+        Matcher cal = calendarPattern.matcher(line);
+
+
+        if(r.find() && d.find() && cal.find()) {
+            this.dataLine = line;
+            this.robotID = r.group().replace(" ", "");
+            this.date = LocalDate.parse(d.group().replace("[", "").replace("]", ""), formatter);
+            this.movement = new Movement(line);
+            this.sensor= new Sensor(line);
         }
-        else if (!(d.find())){
-            throw new IllegalArgumentException("Date invalid.");
+        else{
+            throw new IllegalArgumentException("Illegal argument.");
         }
-        this.sensor = new Sensor(line.substring(line.indexOf("("), line.indexOf(")")+1));
-        this.movement = new Movement(line.substring(line.indexOf("\""), line.indexOf("(")-1));
+
     }
 
     public String getRobotID(){
@@ -62,6 +63,8 @@ public class RobotDataLine implements Cloneable {
 
     public Object clone() throws CloneNotSupportedException{
         RobotDataLine copy = (RobotDataLine)super.clone();
+        copy.sensor = (Sensor)sensor.clone();
+        copy.movement = (Movement)movement.clone();
         return copy;
     }
 }

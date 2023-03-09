@@ -73,9 +73,8 @@ public class MyOutput {
     }
 
     public static String[] getBadData() {
-
         String[] dataLog = {
-                "Robot 890A - - [90/03/2022] \"START - NE (ultra$onic)\"",  //Contains invalid day and invalid sensor
+                //"Robot 890A - - [90/03/2022] \"START - NE (ultra$onic)\"",  //Contains invalid day and invalid sensor
                 "Robot 890AZ - - [02/03/2022] \"BACKWARDS - NS (infrared)\""};  //Contains invalid id and invalid movement
         return dataLog;
     }

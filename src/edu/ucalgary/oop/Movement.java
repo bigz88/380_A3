@@ -27,7 +27,7 @@ public class Movement implements Cloneable, FormattedOutput {
             }
         }
         else {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Inavlid movement.");
         }
     }
 
@@ -41,7 +41,8 @@ public class Movement implements Cloneable, FormattedOutput {
 
     @Override
     public Object clone() throws CloneNotSupportedException{
-        return super.clone();
+        Movement copy = (Movement)super.clone();
+        return copy;
     }
     @Override
     public String getFormatted(){
