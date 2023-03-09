@@ -23,14 +23,18 @@ public class RobotDataLine implements Cloneable {
         if (r.find()){
             this.robotID = r.group(1);
         }
+        else if (!r.find()){
+            throw new IllegalArgumentException();
+        }
         Matcher d = DATE_PATTERN.matcher(line);
         if (d.find()) {
             String str = (d.group().replace("[", "")
                     .replace("]", "").replaceAll("(\\d{2})/(\\d{2})/(\\d{4})", "$3/$2/$1")
                     .replace("/", "-"));
             this.date = LocalDate.parse(str);
-
-
+        }
+        else if (!(d.find())){
+            throw new IllegalArgumentException();
         }
         this.sensor = new Sensor(line);
         this.movement = new Movement(line);

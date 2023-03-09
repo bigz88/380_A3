@@ -1,5 +1,6 @@
 package edu.ucalgary.oop;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Movement implements Cloneable, FormattedOutput {
@@ -8,10 +9,17 @@ public class Movement implements Cloneable, FormattedOutput {
     private static final String REGEX = "\"([A-Z]+)-([A-Z]{1,2})";
     private static final Pattern PATTERN = Pattern.compile(REGEX);
 
-    public Movement(String movement){
-        String substr = movement.substring(movement.indexOf('"'));
-        this.action = substr.substring(substr.indexOf('"')+1, substr.indexOf(' '));
-        this.direction = substr.substring(substr.indexOf("- ")+2, substr.indexOf(" ("));
+    public Movement(String movement) throws IllegalArgumentException{
+        Matcher m = PATTERN.matcher(movement);
+        if (m.find()){
+            String substr = movement.substring(movement.indexOf('"'));
+            this.action = substr.substring(substr.indexOf('"')+1, substr.indexOf(' '));
+            this.direction = substr.substring(substr.indexOf("- ")+2, substr.indexOf(" ("));
+        }
+        else {
+            throw new IllegalArgumentException();
+        }
+
     }
 
     public String getAction(){
